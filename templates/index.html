@@ -1,0 +1,56 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Face Mask Detection</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h2>Face Mask Detection</h2>-->
+<!--    <img id="video_feed" width="640" height="480" src="{{ url_for('video_feed') }}">-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Mask Detection</title>
+    <style>
+        .emoji {
+            font-size: 60px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Face Mask Detection</h2>
+    <div> <img id="video_feed" width="640" height="480" src="{{ url_for('video_feed') }}"></div>
+    <div class="emoji" id="emoji"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("form").submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "/predict",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $("#result").text("Prediction: " + response.prediction + " (Confidence: " + response.confidence.toFixed(2) + ")");
+                    if (response.prediction === "With Mask") {
+    $("#emoji").html("&#x1F604;");  // Smiley emoji (😄)
+} else {
+    $("#emoji").html("&#x1F622;");  // Sad emoji (😢)
+}
+
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
